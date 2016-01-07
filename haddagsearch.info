@@ -1,6 +1,6 @@
 name = haddagsearch
-description = "Permet aux utilisateurs de rechercher le contenu du site via une barre de recherche."
+description = "improves research french website"
 dependencies[] = search
 dependencies[] = taxonomy
 core = 7.x
-package = autres
+package = search
