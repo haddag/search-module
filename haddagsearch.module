@@ -10,22 +10,24 @@
  *   Array that holds the current path as returned from arg() function
  */
 function haddagsearch_help($path, $arg) {
-    switch ($path) {
-        case "admin/help#current_posts":
-            return '<p>' . t("Displays links to nodes created on this date") . '</p>';
-        break;
+  switch ($path) {
+  case "admin/help#current_posts":
+  return '<p>' . t("Displays links to nodes created on this date") . '</p>';
+  break;
     }
 }
 /**
  * Implements hook_permission().
  */
 function haddagsearch_permission() {
-    return array('permission to manage the research for a french website' => array('title' => t('permission to manage the research for a french website'),));
+  return array('manage haddag search' => array('title' => t('permission to manage the research for a french website'),));
 }
 /**
  * Implements hook_preprocess($text).
  *This hook is called to preprocess both the text added to the search index and the keywords users have submitted for searching.
  */
 function haddagsearch_preprocess($text) {
-    return $text;
+  // Load content_types.inc from the node module.
+  module_load_include('inc', 'haddagsearch', 'sonnex');
+  return $text;
 }
