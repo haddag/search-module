@@ -1,5 +1,5 @@
 <?php
-function sonnex_is_Vowel($char) {
+function sonnex_is_vowel($char) {
   static $VOWELS = array(
 	'a', 'â', 'à', 'ä', 'e', 'é', 'è', 'ê', 'ë', 'i', 'î', 'ï', 'o', 'ô',
 	'ö', 'u', 'ù', 'û', 'ü', 'y', 'œ'
@@ -8,7 +8,7 @@ function sonnex_is_Vowel($char) {
   return in_array($char, $VOWELS);
 }
 
-function sonnex_is_Conson($char) {
+function sonnex_is_conson($char) {
   static $CONSONS = array(
 	'b', 'c', 'ç', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q',
 	'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
@@ -31,338 +31,338 @@ function sonnex_sonx($st) {
   $tail = mb_substr($st, 1);
 
   // Apostroph is ignored/silent
-  if($head == "'") return sonx($tail);
-  if($head == "’") return sonx($tail);
+  if($head == "'") return sonnex_sonx($tail);
+  if($head == "’") return sonnex_sonx($tail);
 
   // Starting with 'a'
   if($st == "a") return "a";
   if($st == "aient") return "E";
   if($st == "ain") return "1";
-  if(mb_startswith($st, "ain")) {
+  if(sonnex_mb_startswith($st, "ain")) {
 	  $v = mb_substr($st, 3, 1);
 	  $cs = mb_substr($st, 4);
-	  if(isVowel($v)) return "E".sonx($v.$cs);
-	  return "1".sonx($v.$cs);
+	  if(sonnex_is_vowel($v)) return "E".sonnex_sonx($v.$cs);
+	  return "1".sonnex_sonx($v.$cs);
   }
   if($st == "ais") return "E";
-  if(mb_startswith($st, "ais")) {
+  if(sonnex_mb_startswith($st, "ais")) {
 	  $v = mb_substr($st, 3, 1);
 	  $cs = mb_substr($st, 4);
-	  if($v == 's') return "Es".sonx($cs);
-	  if(isVowel($v)) return "Ez".sonx($v.$cs);
-	  return "Es".sonx($v.$cs);
+	  if($v == 's') return "Es".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($v)) return "Ez".sonnex_sonx($v.$cs);
+	  return "Es".sonnex_sonx($v.$cs);
   }
   if($st == "ail") return "ai";
-  if(mb_startswith($st, "aill")) return "ai".sonx(mb_substr($st, 4));
-  if(mb_startswith($st, "ai")) return 'E'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "amm")) return "am".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "am")) {
+  if(sonnex_mb_startswith($st, "aill")) return "ai".sonnex_sonx(mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "ai")) return 'E'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "amm")) return "am".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "am")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 'm') return "am".sonx($cs);
-	  if(isVowel($c)) return "am".sonx($c.$cs);
-	  return '2'.sonx($c.$cs);
+	  if($c == 'm') return "am".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($c)) return "am".sonnex_sonx($c.$cs);
+	  return '2'.sonnex_sonx($c.$cs);
   }
   if($st == "an") return "2";
-  if(mb_startswith($st, "an")) {
+  if(sonnex_mb_startswith($st, "an")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 'n') return "an".sonx($cs);
-	  if($c == 't') return "2t".sonx($cs);
-	  if(isVowel($c)) return "an".sonx($c.$cs);
-	  return '2'.sonx($c.$cs);
+	  if($c == 'n') return "an".sonnex_sonx($cs);
+	  if($c == 't') return "2t".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($c)) return "an".sonnex_sonx($c.$cs);
+	  return '2'.sonnex_sonx($c.$cs);
   }
   if($st == "assent") return "as";
-  if(mb_startswith($st, "as")) {
+  if(sonnex_mb_startswith($st, "as")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 's') return "as".sonx($cs);
-	  if(isConson($c)) return "as".sonx($c.$cs);
-	  return "az".sonx($c.$cs);
+	  if($c == 's') return "as".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "as".sonnex_sonx($c.$cs);
+	  return "az".sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "au")) return 'o'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "au")) return 'o'.sonnex_sonx(mb_substr($st, 2));
   if($st == "ay") return "E";
   if($st == "ays") return "E";
 
-  if($head == 'à') return 'a'.sonx($tail);
+  if($head == 'à') return 'a'.sonnex_sonx($tail);
   if($head == 'â') {
 	  $c = mb_substr($st, 1, 1);
 	  $cs = mb_substr($st, 2);
-	  if($c == 't') return 'a'.sonx('t'.$cs);
-	  return 'a'.sonx($c.$cs);
+	  if($c == 't') return 'a'.sonnex_sonx('t'.$cs);
+	  return 'a'.sonnex_sonx($c.$cs);
   }
 
   // Starting with 'b'
   if($st == "b") return "";
-  if(mb_startswith($st, "bb")) return 'b'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "bb")) return 'b'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'c'
   if($st == "c") return "";
-  if(mb_startswith($st, "ca")) return 'k'.sonx('a'.mb_substr($st, 2));
-  if(mb_startswith($st, "cc")) {
+  if(sonnex_mb_startswith($st, "ca")) return 'k'.sonnex_sonx('a'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "cc")) {
 	  $v = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($v == 'o') return 'k'.sonx('o'.$cs);
-	  if($v == 'u') return 'k'.sonx('u'.$cs);
-	  return "ks".sonx($cs);
+	  if($v == 'o') return 'k'.sonnex_sonx('o'.$cs);
+	  if($v == 'u') return 'k'.sonnex_sonx('u'.$cs);
+	  return "ks".sonnex_sonx($cs);
   }
-  if(mb_startswith($st, "ce")) return 's'.sonx('e'.mb_substr($st, 2));
-  if(mb_startswith($st, "c'")) return 's'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "c’")) return 's'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "chao")) return 'k'.sonx("ao".mb_substr($st, 4));
-  if(mb_startswith($st, "chl")) return "kl".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "choe")) return 'k'.sonx("oe".mb_substr($st, 4));
-  if(mb_startswith($st, "chœ")) return 'k'.sonx("oe".mb_substr($st, 3));
-  if(mb_startswith($st, "chr")) return "kr".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "ch")) return 'C'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "ci")) return 's'.sonx('i'.mb_substr($st, 2));
-  if(mb_startswith($st, "ck")) return 'k'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "coeu")) return 'k'.sonx ("oeu".mb_substr($st, 4));
-  if(mb_startswith($st, "compt")) return "k3t".sonx(mb_substr($st, 5));
-  if(mb_startswith($st, "cœu")) return 'k'.sonx("œu".mb_substr($st, 3));
-  if(mb_startswith($st, "co")) return 'k'.sonx('o'.mb_substr($st, 2));
-  if(mb_startswith($st, "cuei")) return "ke".sonx('i'.mb_substr($st, 4));
-  if(mb_startswith($st, "cu")) return 'k'.sonx('u'.mb_substr($st, 2));
-  if(mb_startswith($st, "cy")) return 's'.sonx('y'.mb_substr($st, 2));
-  if($head == "c") return 'k'.sonx($tail);
-  if($head == 'ç') return 's'.sonx($tail);
+  if(sonnex_mb_startswith($st, "ce")) return 's'.sonnex_sonx('e'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "c'")) return 's'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "c’")) return 's'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "chao")) return 'k'.sonnex_sonx("ao".mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "chl")) return "kl".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "choe")) return 'k'.sonnex_sonx("oe".mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "chœ")) return 'k'.sonnex_sonx("oe".mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "chr")) return "kr".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "ch")) return 'C'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ci")) return 's'.sonnex_sonx('i'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ck")) return 'k'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "coeu")) return 'k'.sonnex_sonx ("oeu".mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "compt")) return "k3t".sonnex_sonx(mb_substr($st, 5));
+  if(sonnex_mb_startswith($st, "cœu")) return 'k'.sonnex_sonx("œu".mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "co")) return 'k'.sonnex_sonx('o'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "cuei")) return "ke".sonnex_sonx('i'.mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "cu")) return 'k'.sonnex_sonx('u'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "cy")) return 's'.sonnex_sonx('y'.mb_substr($st, 2));
+  if($head == "c") return 'k'.sonnex_sonx($tail);
+  if($head == 'ç') return 's'.sonnex_sonx($tail);
 
   // Starting with 'd'
   if($st == "d") return "";
   if($st == "ds") return "";
-  if(mb_startswith($st, "dd")) return 'd'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "dd")) return 'd'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'e'
   if($st == "e") return "";
   if($st == "ec") return "Ec";
   if($st == "ef") return "Ef";
   if($st == "eaux") return "o";
-  if(mb_startswith($st, "eann")) return "an".sonx(mb_substr($st, 4));
-  if(mb_startswith($st, "ean")) return '2'.sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "eau")) return 'o'.sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "eff")) return "Ef".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "egm")) return 'E'.sonx("gm".mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "eann")) return "an".sonnex_sonx(mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "ean")) return '2'.sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "eau")) return 'o'.sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "eff")) return "Ef".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "egm")) return 'E'.sonnex_sonx("gm".mb_substr($st, 3));
   if($st == "ein") return "1";
-  if(mb_startswith($st, "ein")) {
+  if(sonnex_mb_startswith($st, "ein")) {
 	  $c = mb_substr($st, 3, 1);
 	  $cs = mb_substr($st, 4);
-	  if($c == 'n') return "En".sonx($cs);
-	  if(isVowel($c)) return "En".sonx($c.$cs);
-	  return '1'.sonx($c.$cs);
+	  if($c == 'n') return "En".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($c)) return "En".sonnex_sonx($c.$cs);
+	  return '1'.sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "ei")) return 'E'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "ell")) return "El".sonx(mb_substr($st,3));
-  if(mb_startswith($st, "el")) {
+  if(sonnex_mb_startswith($st, "ei")) return 'E'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ell")) return "El".sonnex_sonx(mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "el")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isConson($c)) return 'E'.sonx('l'.$c.$cs);
-	  return 'e'.sonx('l'.$c.$cs);
+	  if(sonnex_is_conson($c)) return 'E'.sonnex_sonx('l'.$c.$cs);
+	  return 'e'.sonnex_sonx('l'.$c.$cs);
   }
-  if(mb_startswith($st, "emm")) return "Em".sonx(mb_substr($st,3));
-  if(mb_startswith($st, "emp")) return '2'.sonx(mb_substr($st,3));
-  if(mb_startswith($st, "enn")) return "En".sonx(mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "emm")) return "Em".sonnex_sonx(mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "emp")) return '2'.sonnex_sonx(mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "enn")) return "En".sonnex_sonx(mb_substr($st,3));
   if($st == "en") return "2";
-  if(mb_startswith($st, "en")) {
+  if(sonnex_mb_startswith($st, "en")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isVowel($c)) return "en".sonx($c.$cs);
-	  return '2'.sonx($c.$cs);
+	  if(sonnex_is_vowel($c)) return "en".sonnex_sonx($c.$cs);
+	  return '2'.sonnex_sonx($c.$cs);
   }
   if($st == "er") return "E";
   if($st == "ert") return "Er";
-  if(mb_startswith($st, "err")) return "Er".sonx(mb_substr($st,3));
-  if(mb_startswith($st, "erf")) return "Er".sonx('f'.mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "err")) return "Er".sonnex_sonx(mb_substr($st,3));
+  if(sonnex_mb_startswith($st, "erf")) return "Er".sonnex_sonx('f'.mb_substr($st,3));
   if($st == "es") return "";
-  if(mb_startswith($st, "esch")) return "EC".sonx(mb_substr($st,4));
+  if(sonnex_mb_startswith($st, "esch")) return "EC".sonnex_sonx(mb_substr($st,4));
   if($st == "essent") return "Es";
-  if(mb_startswith($st, "es")) {
+  if(sonnex_mb_startswith($st, "es")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 'h') return 'E'.sonx('h'.$cs);
-	  if($c == 'n') return 'E'.sonx('n'.$cs);
-	  if($c == 's') return "Es".sonx($cs);
-	  if(isConson($c)) return "Es".sonx($c.$cs);
-	  return "ez".sonx($c.$cs);
+	  if($c == 'h') return 'E'.sonnex_sonx('h'.$cs);
+	  if($c == 'n') return 'E'.sonnex_sonx('n'.$cs);
+	  if($c == 's') return "Es".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "Es".sonnex_sonx($c.$cs);
+	  return "ez".sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "és")) {
+  if(sonnex_mb_startswith($st, "és")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 's') return "Es".sonx($cs);
-	  if(isConson($c)) return "Es".sonx($c.$cs);
-	  return "Ez".sonx($c.$cs);
+	  if($c == 's') return "Es".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "Es".sonnex_sonx($c.$cs);
+	  return "Ez".sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "ett")) return "Et".sonx(mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "ett")) return "Et".sonnex_sonx(mb_substr($st, 4));
   if($st == "et") return "E";
-  if(mb_startswith($st, "et")) return "et".sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "eun")) {
+  if(sonnex_mb_startswith($st, "et")) return "et".sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "eun")) {
 	  $c = mb_substr($st, 3, 1);
 	  $cs = mb_substr($st, 4);
-	  if(isVowel($c)) return "en".sonx($c.$cs);
-	  return '1'.sonx($c.$cs);
+	  if(sonnex_is_vowel($c)) return "en".sonnex_sonx($c.$cs);
+	  return '1'.sonnex_sonx($c.$cs);
   }
   if($st == "eux") return "e";
-  if(mb_startswith($st, "euxi")) return "ez".sonx('i'.mb_substr($st, 4));
-  if(mb_startswith($st, "eu")) return 'e'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "euxi")) return "ez".sonnex_sonx('i'.mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "eu")) return 'e'.sonnex_sonx(mb_substr($st, 2));
   if($st == "ex") return "Eks";
-  if(mb_startswith($st, "ey")) {
+  if(sonnex_mb_startswith($st, "ey")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isConson($c)) return 'E'.sonx($c.$cs);
-	  return 'E'.sonx('y'.$c.$cs);
+	  if(sonnex_is_conson($c)) return 'E'.sonnex_sonx($c.$cs);
+	  return 'E'.sonnex_sonx('y'.$c.$cs);
   }
   if($st == "ez") return "E";
 
-  if($head == 'è') return 'E'.sonx($tail);
+  if($head == 'è') return 'E'.sonnex_sonx($tail);
   if($head == 'ê') {
 	  $c = mb_substr($st, 1, 1);
 	  $cs = mb_substr($st, 2);
-	  if($c == 't') return 'E'.sonx('t'.$cs);
-	  return 'E'.sonx($c.$cs);
+	  if($c == 't') return 'E'.sonnex_sonx('t'.$cs);
+	  return 'E'.sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "ël")) return 'E'.sonx('l'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ël")) return 'E'.sonnex_sonx('l'.mb_substr($st, 2));
   if($st == "é") return "E";
   if($head == 'é') {
 	  $c = mb_substr($st, 1, 1);
 	  $cs = mb_substr($st, 2);
-	  if($c == 't')  return "Et".sonx($cs);
-	  return 'E'.sonx($c.$cs);
+	  if($c == 't')  return "Et".sonnex_sonx($cs);
+	  return 'E'.sonnex_sonx($c.$cs);
   }
 
   // Starting with 'f'
-  if(mb_startswith($st, "ff")) return 'f'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ff")) return 'f'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'g'
   if($st == "g") return "";
   if($st == "ge") return 'j';
-  if(mb_startswith($st, "ge")) return 'j'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gé")) return 'jE'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gi")) return 'ji'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gn")) return 'n'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gy")) return 'j'.sonx('y'.mb_substr($st, 2));
-  if(mb_startswith($st, "guë")) return "gu".sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gu")) return 'g'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "gg")) return 'g'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ge")) return 'j'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gé")) return 'jE'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gi")) return 'ji'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gn")) return 'n'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gy")) return 'j'.sonnex_sonx('y'.mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "guë")) return "gu".sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gu")) return 'g'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "gg")) return 'g'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'h'
-  if($head == 'h') return sonx($tail);
+  if($head == 'h') return sonnex_sonx($tail);
 
   // Starting with 'i'
   if($st == "ic") return "ik";
   if($st == "ics") return "ik";
-  if(mb_startswith($st, "ienn")) return "iEn".sonx(mb_substr($st, 4));
-  if(mb_startswith($st, "ien")) return "i1".sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "ienn")) return "iEn".sonnex_sonx(mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "ien")) return "i1".sonnex_sonx(mb_substr($st, 3));
   if($st == "in") return "1";
-  if(mb_startswith($st, "in")) {
+  if(sonnex_mb_startswith($st, "in")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 'n') return "in".sonx($cs);
-	  if(isVowel($c)) return "in".sonx($c.$cs);
-	  return '1'.sonx($c.$cs);
+	  if($c == 'n') return "in".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($c)) return "in".sonnex_sonx($c.$cs);
+	  return '1'.sonnex_sonx($c.$cs);
   }
   if($st == "issent") return "is";
   if($st == "is") return "i";
-  if(mb_startswith($st, "is")) {
+  if(sonnex_mb_startswith($st, "is")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 's') return "is".sonx($cs);
-	  if(isConson($c)) return "is".sonx($c.$cs);
-	  return "iz".sonx($c.$cs);
+	  if($c == 's') return "is".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "is".sonnex_sonx($c.$cs);
+	  return "iz".sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "ixi")) return "iz".sonx('i'.mb_substr($st, 3));
-  if(mb_startswith($st, "ill")) return 'i'.sonx(mb_substr($st, 3));
-  if($head == "i") return 'i'.sonx($tail);
+  if(sonnex_mb_startswith($st, "ixi")) return "iz".sonnex_sonx('i'.mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "ill")) return 'i'.sonnex_sonx(mb_substr($st, 3));
+  if($head == "i") return 'i'.sonnex_sonx($tail);
 
-  if($head == "ï") return 'i'.sonx($tail);
+  if($head == "ï") return 'i'.sonnex_sonx($tail);
 
   // Starting with 'l'
-  if(mb_startswith($st, "ll")) return 'l'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ll")) return 'l'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'm'
-  if(mb_startswith($st, "mm")) return 'm'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "mm")) return 'm'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'n'
-  if(mb_startswith($st, "nn")) return 'n'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "nn")) return 'n'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'o'
-  if(mb_startswith($st, "occ")) return "ok".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "oeu")) return 'e'.sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "œu")) return 'e'.sonx(mb_substr($st, 2));
-  if($head == "œ") return 'e'.sonx($tail);
+  if(sonnex_mb_startswith($st, "occ")) return "ok".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "oeu")) return 'e'.sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "œu")) return 'e'.sonnex_sonx(mb_substr($st, 2));
+  if($head == "œ") return 'e'.sonnex_sonx($tail);
   if($st == "oient") return "Ua";
-  if(mb_startswith($st, "oin")) return "U1".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "ois")) return "Ua".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "omm")) return "om".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "om")) {
+  if(sonnex_mb_startswith($st, "oin")) return "U1".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "ois")) return "Ua".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "omm")) return "om".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "om")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isVowel($c)) return "om".sonx($c.$cs);
-	  return '3'.sonx($c.$cs);
+	  if(sonnex_is_vowel($c)) return "om".sonnex_sonx($c.$cs);
+	  return '3'.sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "onn")) return "on".sonx(mb_substr($st, 3));
-  if(mb_startswith($st, "on")) {
+  if(sonnex_mb_startswith($st, "onn")) return "on".sonnex_sonx(mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "on")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isVowel($c)) return "on".sonx($c.$cs);
-	  return "3".sonx($c.$cs);
+	  if(sonnex_is_vowel($c)) return "on".sonnex_sonx($c.$cs);
+	  return "3".sonnex_sonx($c.$cs);
   }
   if($st == "ossent") return "os";
-  if(mb_startswith($st, "os")) {
+  if(sonnex_mb_startswith($st, "os")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 's') return "os".sonx($cs);
-	  if(isConson($c)) return "os".sonx($c.$cs);
-	  return "oz".sonx($c.$cs);
+	  if($c == 's') return "os".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "os".sonnex_sonx($c.$cs);
+	  return "oz".sonnex_sonx($c.$cs);
   }
-  if(mb_startswith($st, "ou")) return 'U'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "où")) return 'U'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "oû")) return 'U'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "ou")) return 'U'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "où")) return 'U'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "oû")) return 'U'.sonnex_sonx(mb_substr($st, 2));
 
-  if($head == "ô") return 'o'.sonx($tail);
-  if($head == "ö") return 'o'.sonx($tail);
+  if($head == "ô") return 'o'.sonnex_sonx($tail);
+  if($head == "ö") return 'o'.sonnex_sonx($tail);
 
   // Starting with 'p'
   if($st == "p") return "";
   if($st == "ps") return "";
-  if(mb_startswith($st, "ph")) return 'f'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "pp")) return 'p'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "pays")) return "pE".sonx ("is".mb_substr($st, 4));
+  if(sonnex_mb_startswith($st, "ph")) return 'f'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "pp")) return 'p'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "pays")) return "pE".sonnex_sonx ("is".mb_substr($st, 4));
 
   // Starting with 'q'
-  if(mb_startswith($st, "qur")) return "ku".sonx('r'.mb_substr($st, 3));
-  if(mb_startswith($st, "qu")) return 'k'.sonx(mb_substr($st, 2));
-  if($head == 'q') return 'k'.sonx($tail);
+  if(sonnex_mb_startswith($st, "qur")) return "ku".sonnex_sonx('r'.mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "qu")) return 'k'.sonnex_sonx(mb_substr($st, 2));
+  if($head == 'q') return 'k'.sonnex_sonx($tail);
 
   // Starting with 'r'
-  if(mb_startswith($st, "rr")) return 'r'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "rr")) return 'r'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 's'
   if($st == "s") return "";
-  if(mb_startswith($st, "ss")) return 's'.sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "st")) return "st".sonx(mb_substr($st, 2));
-  if(mb_startswith($st, "sci")) return 's'.sonx('i'.mb_substr($st, 3));
+  if(sonnex_mb_startswith($st, "ss")) return 's'.sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "st")) return "st".sonnex_sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "sci")) return 's'.sonnex_sonx('i'.mb_substr($st, 3));
 
   // Starting with 't'
   if($st == "t") return "";
   if($st == "ts") return "";
-  if(mb_startswith($st, "tier")) return 't'.sonx("ier".mb_substr($st,4));
-  if(mb_startswith($st, "ti")) {
+  if(sonnex_mb_startswith($st, "tier")) return 't'.sonnex_sonx("ier".mb_substr($st,4));
+  if(sonnex_mb_startswith($st, "ti")) {
 	  $v = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if(isVowel($v)) return 's'.sonx('i'.$v.$cs);
-	  return 't'.sonx('i'.$v.$cs);
+	  if(sonnex_is_vowel($v)) return 's'.sonnex_sonx('i'.$v.$cs);
+	  return 't'.sonnex_sonx('i'.$v.$cs);
   }
-  if(mb_startswith($st, "tt")) return 't'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "tt")) return 't'.sonnex_sonx(mb_substr($st, 2));
 
   // Starting with 'u'
   if($st == "un") return "1";
-  if($head == "û") return 'u'.sonx($tail);
+  if($head == "û") return 'u'.sonnex_sonx($tail);
   if($st == "ussent") return "us";
-  if(mb_startswith($st, "us")) {
+  if(sonnex_mb_startswith($st, "us")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 's') return "us".sonx($cs);
-	  if(isConson($c)) return "us".sonx($c.$cs);
-	  return "uz".sonx($c.$cs);
+	  if($c == 's') return "us".sonnex_sonx($cs);
+	  if(sonnex_is_conson($c)) return "us".sonnex_sonx($c.$cs);
+	  return "uz".sonnex_sonx($c.$cs);
   }
 
   // Starting with 'v'
@@ -370,29 +370,29 @@ function sonnex_sonx($st) {
   // about this letter, it’s always pronounced 'v' and never doubled.
 
   // Starting with 'w'
-  if($head == "w") return 'v'.sonx($tail);
+  if($head == "w") return 'v'.sonnex_sonx($tail);
 
   // Starting with 'x'
   if($st == "x") return "";
-  if(mb_startswith($st, "x")) {
+  if(sonnex_mb_startswith($st, "x")) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
-	  if($c == 'c') return "ks".sonx($cs);
-	  if(isVowel($c)) return "kz".sonx($c.$cs);
-	  return "ks".sonx($c.$cs);
+	  if($c == 'c') return "ks".sonnex_sonx($cs);
+	  if(sonnex_is_vowel($c)) return "kz".sonnex_sonx($c.$cs);
+	  return "ks".sonnex_sonx($c.$cs);
   }
 
   // Starting with 'y'
-  if($head == "y") return 'i'.sonx($tail);
+  if($head == "y") return 'i'.sonnex_sonx($tail);
 
   // Starting with 'z'
-  if(mb_startswith($st, "zz")) return 'z'.sonx(mb_substr($st, 2));
+  if(sonnex_mb_startswith($st, "zz")) return 'z'.sonnex_sonx(mb_substr($st, 2));
 
   // Copy every other character as is;
-  if(isConson($head) or isVowel($head)) {
-	  return $head.sonx($tail);
+  if(sonnex_is_conson($head) or sonnex_is_vowel($head)) {
+	  return $head.sonnex_sonx($tail);
   } else {
-	  return sonx($tail);
+	  return sonnex_sonx($tail);
   }
 }
 
@@ -420,9 +420,9 @@ function sonnex($st) {
 	case "ses": return "sE";
 	case "tes": return "tE";
 	default:
-		if(mb_startswith($st, "tien"))
-			return 't'.sonx("ien".mb_substr($st, 4));
-		return sonx($st);
+		if(sonnex_mb_startswith($st, "tien"))
+			return 't'.sonnex_sonx("ien".mb_substr($st, 4));
+		return sonnex_sonx($st);
   }
 }
 
@@ -431,7 +431,7 @@ function sonnex_clean_phrase($phrase) {
 }
 
 function sonnex_phrase($phrase) {
-  $phrase = clean_phrase($phrase);
+  $phrase = sonnex_clean_phrase($phrase);
   $words = explode(' ', $phrase);
   $sonnexs = array();
   foreach($words as $word) {
@@ -442,7 +442,7 @@ function sonnex_phrase($phrase) {
 }
 
 function sonnex_libelle($libelle) {
-  $libelle = clean_phrase($libelle);
+  $libelle = sonnex_clean_phrase($libelle);
   $libelle = preg_replace(
 	"/( aux | de la | de l'| des | les | de | du | d')/",
 	' ',
