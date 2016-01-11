@@ -68,7 +68,8 @@ function sonnex_sonx($st) {
 	  $c = mb_substr($st, 2, 1);
 	  $cs = mb_substr($st, 3);
 	  if($c == 'n') return "an".sonnex_sonx($cs);
-	  if($c == 't') return "2t".sonnex_sonx($cs);
+	  if($c == 't' and $cs=="") return "2";
+	  if($c == 'te') return "2t".sonnex_sonx($cs);
 	  if(sonnex_is_vowel($c)) return "an".sonnex_sonx($c.$cs);
 	  return '2'.sonnex_sonx($c.$cs);
   }
