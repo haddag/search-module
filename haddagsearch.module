@@ -18,6 +18,7 @@ function haddagsearch_help($path, $arg) {
     }
 }
 
+
 /**
  * Implements hook_permission().
  */
@@ -30,7 +31,12 @@ function haddagsearch_permission() {
  *This hook is called to preprocess both the text added to the search index and the keywords users have submitted for searching.
  */
 function haddagsearch_preprocess($text) {
-  // Load content_types.inc from the node module.
   module_load_include('inc', 'haddagsearch', 'sonnex');
-  return $text;
+  $file = DRUPAL_ROOT . '/includes/utility.inc';
+  if (is_file($file)) {
+  require_once $file;
+  }
+  drupal_var_export($text, $prefix = '');
+
+  return($text);
 }
