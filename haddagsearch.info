@@ -4,3 +4,4 @@ dependencies[] = search
 dependencies[] = taxonomy
 core = 7.x
 package = search
+configure = admin/config/search/haddagsearch

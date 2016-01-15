@@ -13,9 +13,27 @@
 function haddagsearch_help($path, $arg) {
   switch ($path) {
     case "admin/help#current_posts":
-    return '<p>' . t("Displays links to nodes created on this date") . '</p>';
+    return '<p>' . t("help for haddagsearch module") . '</p>';
     break;
   }
+}
+
+/**
+ * Implements hook_menu().
+ */
+function haddagsearch_menu() {
+  $items = array();
+
+  $items['admin/config/search/haddagsearch'] = array(
+    'title' => 'Haddag Search',
+    'description' => 'Configuration for HaddagSearch module',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('haddagsearch_config_form'),
+    'access arguments' => array('access administration haddagsearch'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items; 
 }
 
 /**
@@ -23,10 +41,67 @@ function haddagsearch_help($path, $arg) {
  */
 function haddagsearch_permission() {
   return array(
-    'manage haddag search' => array(
+    'access administration haddagsearch' => array(
       'title' => t('permission to manage the research for a french website'),
     )
   );
+}
+
+/**
+ * Page callback: Current posts settings
+ *
+ * @see current_posts_menu()
+ */
+function haddagsearch_config_form($form, &$form_state) {
+  $form['haddagsearch_ignored_words'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Ignored words'),
+    '#default_value' => variable_get('haddagsearch_ignored_words', ""),
+    '#description' => t('List of ignored words. One word per line.'),
+    '#required' => TRUE,
+  );
+
+  return system_settings_form($form);
+} 
+
+/**
+ *
+ */
+function _haddagsearch_separate_words($line) {
+  
+  $list = array();
+  foreach(explode(" ", $line) as $word) {
+    if($word != "") {
+      $list[]= mb_strtolower($word);  
+    } 
+  }
+    
+  return $list;
+}
+  
+/**
+ * 
+ */
+function _haddagsearch_get_ignored_words() {
+  static $cache = array();
+
+  if(count($cache) > 0) {
+    return $cache;	
+  }
+
+  $lines = variable_get('haddagsearch_ignored_words', "");
+
+  $list = array();
+  foreach(explode("\n", $lines) as $line) {
+    $list = array_merge($list, _haddagsearch_separate_words(trim($line))); 
+  }
+
+  array_unique($list);
+
+  $cache = $list;
+
+  
+  return $cache;
 }
 
 /**
@@ -35,12 +110,34 @@ function haddagsearch_permission() {
  * and the keywords users have submitted for searching.
  */
 function haddagsearch_search_preprocess($text) {
-  module_load_include('inc', 'haddagsearch', 'sonnex');
-  $file = DRUPAL_ROOT . '/includes/utility.inc';
-  if (is_file($file)) {
-    require_once ($file);
-  }
-  drupal_var_export ($text);
+  static $cache = array();
 
-  return $text;
+  if(isset($cache[$text])) {
+    return $cache[$text];	
+  }  
+
+  $timestart = microtime(true);
+  	
+  module_load_include('inc', 'haddagsearch', 'sonnex');
+  
+  $ignored_words = _haddagsearch_get_ignored_words();
+  $keywords = array();
+  $words = _haddagsearch_separate_words($text);
+  foreach($words as $word) {
+    if(!in_array($word, $ignored_words)) {
+      $keywords[]= sonnex_sonnex($word);
+    }
+  }
+
+  $cache[$text] = implode(" ", $keywords);
+
+  
+  $timeend = microtime(true);
+  $time = $timeend-$timestart;
+  $page_load_time = number_format($time, 3);
+  drupal_set_message("$text -> $cache[$text] : ".$page_load_time);
+  
+  
+  return $cache[$text];
+  
 }
