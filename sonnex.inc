@@ -13,7 +13,7 @@ function _sonnex_is_conson($char) {
   static $CONSONS = array(
   'b', 'c', 'ç', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q',
   'r', 's', 't', 'v', 'w', 'x', 'y', 'z'
-  );""
+  );
 
   return in_array($char, $CONSONS);
 }
