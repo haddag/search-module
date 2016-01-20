@@ -26,7 +26,6 @@ function _sonnex_mb_startswith($string, $start) {
 
 function _sonnex_sonx($st) {
   
-  
   if($st == "") return "";
 
   $length = mb_strlen($st);
