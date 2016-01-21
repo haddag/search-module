@@ -124,6 +124,7 @@ function _sonnex_sonx($st) {
       return 'E'._sonnex_sonx('y'.$c.$cs);
     }
     if($st == "ez") return "E";
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 's'
@@ -132,6 +133,7 @@ function _sonnex_sonx($st) {
     if($st2 == "ss") return 's'._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "st") return "st"._sonnex_sonx(mb_substr($st, 2));
     if($st3 == "sci") return 's'._sonnex_sonx('i'.mb_substr($st, 3));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'a'
@@ -142,7 +144,7 @@ function _sonnex_sonx($st) {
     if($st3 == "ain") {
       $v = mb_substr($st, 3, 1);
       $cs = mb_substr($st, 4);
-      if(_sonnex_is_vowel($v)) return "E"._sonnex_sonx($v.$cs);
+      if(_sonnex_is_vowel($v)) return "E"._sonnex_sonx("n".$v.$cs);
       return "1"._sonnex_sonx($v.$cs);
     }
     if($st == "ais") return "E";
@@ -154,7 +156,7 @@ function _sonnex_sonx($st) {
       return "Es"._sonnex_sonx($v.$cs);
     }
     if($st == "ail") return "ai";
-    if($st4 == "aill") return "ai"._sonnex_sonx(mb_substr($st, 4));
+    if($st4 == "aill") return "ai"._sonnex_sonx(mb_substr($st, 4)); 
     if($st2 == "ai") return 'E'._sonnex_sonx(mb_substr($st, 2));
     if($st3 == "amm") return "am"._sonnex_sonx(mb_substr($st, 3));
     if($st2 == "am") {
@@ -173,6 +175,7 @@ function _sonnex_sonx($st) {
       if($c == 'te') return "2t"._sonnex_sonx($cs);
       if(_sonnex_is_vowel($c)) return "an"._sonnex_sonx($c.$cs);
       return '2'._sonnex_sonx($c.$cs);
+      return $head._sonnex_sonx($tail);
     }
     if($st == "assent") return "as";
     if($st2 == "as") {
@@ -185,6 +188,7 @@ function _sonnex_sonx($st) {
     if($st2 == "au") return 'o'._sonnex_sonx(mb_substr($st, 2));
     if($st == "ay") return "E";
     if($st == "ays") return "E";
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'i'
@@ -213,6 +217,7 @@ function _sonnex_sonx($st) {
     if($st3 == "ixi") return "iz"._sonnex_sonx('i'.mb_substr($st, 3));
     if($st3 == "ill") return 'i'._sonnex_sonx(mb_substr($st, 3));
     if($head == "i") return 'i'._sonnex_sonx($tail);
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 't'
@@ -227,16 +232,19 @@ function _sonnex_sonx($st) {
       return 't'._sonnex_sonx('i'.$v.$cs);
     }
     if($st2 == "tt") return 't'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
     
   // Starting with 'n'
   if($head == "n") {  
     if($st2 == "nn") return 'n'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'r'
   if($head == "r") {
     if($st2 == "rr") return 'r'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'u'
@@ -250,12 +258,14 @@ function _sonnex_sonx($st) {
       if($c == 's') return "us"._sonnex_sonx($cs);
       if(_sonnex_is_conson($c)) return "us"._sonnex_sonx($c.$cs);
       return "uz"._sonnex_sonx($c.$cs);
+      return $head._sonnex_sonx($tail);
     }
   }
   
   // Starting with 'l'
   if($head == "l") {  
     if($st2 == "ll") return 'l'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'o'
@@ -291,7 +301,7 @@ function _sonnex_sonx($st) {
     if($st2 == "ou") return 'U'._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "où") return 'U'._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "oû") return 'U'._sonnex_sonx(mb_substr($st, 2));
-
+    return $head._sonnex_sonx($tail);
   } 
   
   // Starting with 'd'
@@ -299,6 +309,7 @@ function _sonnex_sonx($st) {
     if($st == "d") return "";
     if($st == "ds") return "";
     if($st2 == "dd") return 'd'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'c'
@@ -332,6 +343,7 @@ function _sonnex_sonx($st) {
     if($st2 == "cy") return 's'._sonnex_sonx('y'.mb_substr($st, 2));
     if($head == "c") return 'k'._sonnex_sonx($tail);
     if($head == 'ç') return 's'._sonnex_sonx($tail);
+    return $head._sonnex_sonx($tail);
   } 
   
   // Starting with 'p'
@@ -341,11 +353,13 @@ function _sonnex_sonx($st) {
     if($st2 == "ph") return 'f'._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "pp") return 'p'._sonnex_sonx(mb_substr($st, 2));
     if($st4 == "pays") return "pE"._sonnex_sonx ("is".mb_substr($st, 4));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'm'
   if($head == "m") {  
     if($st2 == "mm") return 'm'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   //Starting with 'é'
@@ -355,6 +369,7 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't')  return "Et"._sonnex_sonx($cs);
     return 'E'._sonnex_sonx($c.$cs);
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'v'
@@ -366,17 +381,20 @@ function _sonnex_sonx($st) {
     if($st3 == "qur") return "ku"._sonnex_sonx('r'.mb_substr($st, 3));
     if($st2 == "qu") return 'k'._sonnex_sonx(mb_substr($st, 2));
     if($head == 'q') return 'k'._sonnex_sonx($tail);
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'f'
   if($head == "f") {  
     if($st2 == "ff") return 'f'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'b'
   if($head == "b") {  
     if($st == "b") return "";
     if($st2 == "bb") return 'b'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'g'
@@ -391,11 +409,13 @@ function _sonnex_sonx($st) {
     if($st3 == "guë") return "gu"._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "gu") return 'g'._sonnex_sonx(mb_substr($st, 2));
     if($st2 == "gg") return 'g'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
 
   // Starting with 'h'
   if($head == "h") {  
     if($head == 'h') return _sonnex_sonx($tail);
+    return $head._sonnex_sonx($tail);
   }
   
   //starting with 'à'
@@ -410,6 +430,7 @@ function _sonnex_sonx($st) {
       if($c == 'c') return "ks"._sonnex_sonx($cs);
       if(_sonnex_is_vowel($c)) return "kz"._sonnex_sonx($c.$cs);
       return "ks"._sonnex_sonx($c.$cs);
+      return $head._sonnex_sonx($tail);
     }
   }
   
@@ -425,11 +446,13 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't') return 'E'._sonnex_sonx('t'.$cs);
     return 'E'._sonnex_sonx($c.$cs);
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'z'
   if($head == "z") {  
     if($st2 == "zz") return 'z'._sonnex_sonx(mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'w'
@@ -444,6 +467,7 @@ function _sonnex_sonx($st) {
   //Starting with 'ël'
   if($head == 'ël') {
     if($st2 == "ël") return 'E'._sonnex_sonx('l'.mb_substr($st, 2));
+    return $head._sonnex_sonx($tail);
   }
   
   //Starting with 'ô'
@@ -451,6 +475,7 @@ function _sonnex_sonx($st) {
   
   // Starting with 'ö'
   if($head == "ö") return 'o'._sonnex_sonx($tail);
+  
 
   // Starting with 'v'
   // 'v' can be handled by the generic case since there is no special thing
@@ -458,6 +483,7 @@ function _sonnex_sonx($st) {
 
   // Starting with 'û'
   if($head == "û") return 'u'._sonnex_sonx($tail);
+  
   
   // Apostroph is ignored/silent
   if($head == "'") return _sonnex_sonx($tail);
@@ -469,14 +495,11 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't') return 'a'._sonnex_sonx('t'.$cs);
     return 'a'._sonnex_sonx($c.$cs);
+    return $head._sonnex_sonx($tail);
   }
   
-  // Copy every other character as is;
-  if(_sonnex_is_conson($head) or _sonnex_is_vowel($head)) {
-    return $head._sonnex_sonx($tail);
-  } else {
     return _sonnex_sonx($tail);
-  }
+  
 }
 
 // Compute a Sonnex code for a french word.
