@@ -26,6 +26,7 @@ function _sonnex_sonx($st) {
   $head = mb_substr($st, 0, 1);
   $tail = mb_substr($st, 1);
   
+  
   $st2 = "";
   $st3 = "";
   $st4 = "";
@@ -43,7 +44,7 @@ function _sonnex_sonx($st) {
   if ($length >= 2) {
     $st2 = mb_substr($st, 0, 2);
   }
-    
+     
   // Starting with 'e'
   if($head == "e") {  
     if($st == "e") return "";
@@ -258,8 +259,8 @@ function _sonnex_sonx($st) {
       if($c == 's') return "us"._sonnex_sonx($cs);
       if(_sonnex_is_conson($c)) return "us"._sonnex_sonx($c.$cs);
       return "uz"._sonnex_sonx($c.$cs);
-      return $head._sonnex_sonx($tail);
     }
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'l'
@@ -369,12 +370,10 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't')  return "Et"._sonnex_sonx($cs);
     return 'E'._sonnex_sonx($c.$cs);
-    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'v'
-  // 'v' can be handled by the generic case since there is no special thing
-  // about this letter, it’s always pronounced 'v' and never doubled.
+  if($head == 'v') return 'v'._sonnex_sonx($tail);
   
   // Starting with 'q'
   if($head == "q") {  
@@ -414,9 +413,10 @@ function _sonnex_sonx($st) {
 
   // Starting with 'h'
   if($head == "h") {  
-    if($head == 'h') return _sonnex_sonx($tail);
-    return $head._sonnex_sonx($tail);
+    return _sonnex_sonx($tail);
   }
+  
+  if($head == 'j') return 'j'._sonnex_sonx($tail);
   
   //starting with 'à'
   if($head == 'à') return 'a'._sonnex_sonx($tail);
@@ -430,8 +430,8 @@ function _sonnex_sonx($st) {
       if($c == 'c') return "ks"._sonnex_sonx($cs);
       if(_sonnex_is_vowel($c)) return "kz"._sonnex_sonx($c.$cs);
       return "ks"._sonnex_sonx($c.$cs);
-      return $head._sonnex_sonx($tail);
     }
+    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'y'
@@ -446,7 +446,6 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't') return 'E'._sonnex_sonx('t'.$cs);
     return 'E'._sonnex_sonx($c.$cs);
-    return $head._sonnex_sonx($tail);
   }
   
   // Starting with 'z'
@@ -457,6 +456,18 @@ function _sonnex_sonx($st) {
   
   // Starting with 'w'
   if($head == "w") return 'v'._sonnex_sonx($tail);
+  
+  // Starting with 'ç'
+  if($head == "ç") return 's'._sonnex_sonx($tail);
+  
+  // Starting with 'ù'
+  if($head == "ù") return 'u'._sonnex_sonx($tail);
+  
+  // Starting with 'k'
+  if($head == "k") return 'k'._sonnex_sonx($tail);
+  
+  // Starting with 'î'
+  if($head == "î") return "i"._sonnex_sonx($tail);
   
   // Starting with 'œ' 
   if($head == "œ") return 'e'._sonnex_sonx($tail);
@@ -476,14 +487,8 @@ function _sonnex_sonx($st) {
   // Starting with 'ö'
   if($head == "ö") return 'o'._sonnex_sonx($tail);
   
-
-  // Starting with 'v'
-  // 'v' can be handled by the generic case since there is no special thing
-  // about this letter, it’s always pronounced 'v' and never doubled.
-
   // Starting with 'û'
   if($head == "û") return 'u'._sonnex_sonx($tail);
-  
   
   // Apostroph is ignored/silent
   if($head == "'") return _sonnex_sonx($tail);
@@ -495,11 +500,10 @@ function _sonnex_sonx($st) {
     $cs = mb_substr($st, 2);
     if($c == 't') return 'a'._sonnex_sonx('t'.$cs);
     return 'a'._sonnex_sonx($c.$cs);
-    return $head._sonnex_sonx($tail);
   }
   
-    return _sonnex_sonx($tail);
-  
+  // Unnown character
+  return _sonnex_sonx($tail);
 }
 
 // Compute a Sonnex code for a french word.
@@ -512,31 +516,40 @@ function sonnex_sonnex($st) {
   if(isset($cache[$st])) {
     return $cache[$st];  
   }
-
+  
+  if(mb_strlen($st) >= 32 ) { 
+    error_log($st);
+  }
+  
   $st = mb_strtolower($st);
   switch($st) {
-    case "cerf": $st2 = "sEr"; break;
-    case "cerfs": $st2 = "sEr"; break;
-    case "de" : $st2 = "de"; break;
-    case "est": $st2 = "E"; break;
-    case "es" : $st2 = "E"; break;
-    case "huit": $st2 = "uit"; break;
-    case "les": $st2 = "lE"; break;
-    case "mer": $st2 = "mEr"; break;
-    case "mes": $st2 = "mE"; break;
-    case "ressent": $st2 = "res2"; break;
-    case "serf": $st2 = "sEr"; break;
-    case "serfs": $st2 = "sEr"; break;
-    case "sept": $st2 = "sEt"; break;
-    case "septième": $st2 = "sEtiEm"; break;
-    case "ses": $st2 = "sE"; break;
-    case "tes": $st2 = "tE"; break;
+    case "cerf": $st = "sEr"; break;
+    case "cerfs": $st = "sEr"; break;
+    case "de" : $st = "de"; break;
+    case "est": $st = "E"; break;
+    case "es" : $st = "E"; break;
+    case "huit": $st = "uit"; break;
+    case "les": $st = "lE"; break;
+    case "mer": $st = "mEr"; break;
+    case "mes": $st = "mE"; break;
+    case "ressent": $st = "res2"; break;
+    case "serf": $st = "sEr"; break;
+    case "serfs": $st = "sEr"; break;
+    case "sept": $st = "sEt"; break;
+    case "septième": $st = "sEtiEm"; break;
+    case "ses": $st = "sE"; break;
+    case "tes": $st = "tE"; break;
     default:
-      if($st4 == "tien")
-        return 't'._sonnex_sonx("ien".mb_substr($st, 4));
+      $st4 = "";
+
+      if (mb_strlen($st) >= 4) {
+        $st4 = mb_substr($st, 0, 4);
+      }
+      
+      if($st4 == "tien") return 't'._sonnex_sonx("ien".mb_substr($st, 4));
   
-  $cache =$st;
-  
-  return _sonnex_sonx($st);
+      $cache =$st;
+
+      return _sonnex_sonx($st);
   }
 }

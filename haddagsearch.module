@@ -69,6 +69,8 @@ function haddagsearch_config_form($form, &$form_state) {
  */
 function _haddagsearch_separate_words($line) {
   
+  $separe = array("-","/",'\\',":","." );
+  $line = str_replace($separe, " " , $line);
   $list = array();
   foreach(explode(" ", $line) as $word) {
     if($word != "") {
@@ -116,7 +118,7 @@ function haddagsearch_search_preprocess($text) {
     return $cache[$text];	
   }  
 
-  $timestart = microtime(true);
+  //$timestart = microtime(true);
   	
   module_load_include('inc', 'haddagsearch', 'sonnex');
   
@@ -132,10 +134,10 @@ function haddagsearch_search_preprocess($text) {
   $cache[$text] = implode(" ", $keywords);
 
   
-  $timeend = microtime(true);
-  $time = $timeend-$timestart;
-  $page_load_time = number_format($time, 3);
-  drupal_set_message("$text -> $cache[$text] : ".$page_load_time);
+  //$timeend = microtime(true);
+  //$time = $timeend-$timestart;
+  //$page_load_time = number_format($time, 3);
+  //drupal_set_message("$text -> $cache[$text] : ".$page_load_time);
   
   
   return $cache[$text];
