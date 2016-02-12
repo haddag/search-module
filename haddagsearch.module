@@ -13,17 +13,18 @@
 function haddagsearch_help($path, $arg) {
   switch ($path) {
     case "admin/help#current_posts":
-    return '<p>' . t("help for haddagsearch module") . '</p>';
+    return '<p>'. t("help for haddagsearch module") . '</p>';
     break;
   }
 }
 
 /**
- * Implements hook_menu().
+ * Implements hook_menu()
+ * 
  */
 function haddagsearch_menu() {
   $items = array();
-
+  
   $items['admin/config/search/haddagsearch'] = array(
     'title' => 'Haddag Search',
     'description' => 'Configuration for HaddagSearch module',
@@ -31,6 +32,12 @@ function haddagsearch_menu() {
     'page arguments' => array('haddagsearch_config_form'),
     'access arguments' => array('access administration haddagsearch'),
     'type' => MENU_NORMAL_ITEM,
+  );
+  $items['haddagsearch/suggestion/%'] = array(
+    'page callback' => 'haddagsearch_suggestions',
+    'access callback' => TRUE,
+    'page arguments' => array(2),
+    'type' => MENU_CALLBACK,
   );
 
   return $items; 
@@ -40,6 +47,7 @@ function haddagsearch_menu() {
  * Implements hook_permission().
  */
 function haddagsearch_permission() {
+  
   return array(
     'access administration haddagsearch' => array(
       'title' => t('permission to manage the research for a french website'),
@@ -60,18 +68,95 @@ function haddagsearch_config_form($form, &$form_state) {
     '#description' => t('List of ignored words. One word per line.'),
     '#required' => TRUE,
   );
-
+  $form['haddagsearch_suggestion_search'] = array(
+     '#type' => 'textarea',
+     '#title' => t('suggestion_search'),
+     '#default_value' => variable_get('haddagsearch_suggestion_search', ""),
+     '#description' => t('List of suggestion search. Syntax: simpleword = technicalword'),
+     '#required' => TRUE,
+  );
+  
   return system_settings_form($form);
 } 
 
-/**
- *
+/*
+ * This hook changes the search engine form to add suggestions
  */
-function _haddagsearch_separate_words($line) {
+function haddagsearch_form_alter(&$form, &$form_state, $form_id) {
+  $form[''] = array(
+    '#type' => '',
+    '#prefix' => "<div class outputbox-content>",
+    '#suffix' => '</div>',
+  );
+  $form['#attached']['js'] = array(
+    drupal_get_path('module', 'haddagsearch-autocomplete') . '/haddagsearch-autocomplete.js',
+  );
+}
+
+/*
+ * 
+ * This hook recovered the value of the hook and _haddagsearch_separate_suggestionword
+ * Test if the simple word has a technical word corresponding to i
+ */
+function _haddagsearch_get_technical_word($simpleword) {
+  $couple = variable_get("_haddagsearch_separate_suggestionword", "");
   
+  if(isset($couple[$simpleword])) {
+    $technicalword = $couple[$simpleword];
+  }  
+  else {
+      $technicalword = array();
+  }
+
+  return $technicalword;
+}
+
+/*
+ * This hook recovered the list of suggestions and suggestion form
+ * Cutting each line to have the first word that corresponds to the simple word and
+ * The second word corresponding to the technical word .
+ * Then assign the technical word corresponding to the simple word
+ */
+function _haddagsearch_separate_suggestionword () {
+  $couples = array();
+  $text = variable_get('haddagsearch_suggestion_search', "");
+  $lines = explode("\r\n", $text);
+  
+  foreach ($lines as $line) {
+    $couple = explode("=",$line);
+    $simpleword = $couple[0];
+    $technicalword = $couple[1];
+      if (isset($couples[$simpleword])) {
+        $couples[$simpleword][] = $technicalword;
+      } 
+      else {
+        $couples[$simpleword] = array($technicalword);
+      }   
+  }
+  
+  return $couples[$simpleword];
+}
+
+/*
+ * This hook checks whether the word enter the search engine has a technical word and
+ * Returns the suggestion JSON
+ */
+function haddagsearch_suggestion($items) {
+  $suggestion = array(); 
+  $suggestion = _haddagsearch_get_technical_word($items['haddagsearch/suggestion/%']);
+
+  return drupal_jason_output($suggestion);
+}
+  
+/**
+ * This hookreplace characters separation space
+ * And returns the words set in lowercase in a table
+ */
+function _haddagsearch_separate_words($line) {  
   $separe = array("-","/",'\\',":","." );
   $line = str_replace($separe, " " , $line);
   $list = array();
+  
   foreach(explode(" ", $line) as $word) {
     if($word != "") {
       $list[]= mb_strtolower($word);  
@@ -82,7 +167,9 @@ function _haddagsearch_separate_words($line) {
 }
   
 /**
- * 
+ * This hook retrieves the list of words ignored back in form
+ * Drupal list and backspacing .
+ * She then puts the cache
  */
 function _haddagsearch_get_ignored_words() {
   static $cache = array();
@@ -101,8 +188,7 @@ function _haddagsearch_get_ignored_words() {
   array_unique($list);
 
   $cache = $list;
-
-  
+ 
   return $cache;
 }
 
@@ -125,6 +211,7 @@ function haddagsearch_search_preprocess($text) {
   $ignored_words = _haddagsearch_get_ignored_words();
   $keywords = array();
   $words = _haddagsearch_separate_words($text);
+  
   foreach($words as $word) {
     if(!in_array($word, $ignored_words)) {
       $keywords[]= sonnex_sonnex($word);
@@ -132,14 +219,11 @@ function haddagsearch_search_preprocess($text) {
   }
 
   $cache[$text] = implode(" ", $keywords);
-
   
   //$timeend = microtime(true);
   //$time = $timeend-$timestart;
   //$page_load_time = number_format($time, 3);
   //drupal_set_message("$text -> $cache[$text] : ".$page_load_time);
-  
-  
-  return $cache[$text];
-  
+    
+  return $cache[$text]; 
 }
