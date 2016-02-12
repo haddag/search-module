@@ -25,7 +25,6 @@ function _sonnex_sonx($st) {
   $length = mb_strlen($st);
   $head = mb_substr($st, 0, 1);
   $tail = mb_substr($st, 1);
-
   $st2 = "";
   $st3 = "";
   $st4 = "";
